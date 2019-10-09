@@ -3,10 +3,10 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 
 // Insert Id of your guild:
-const guild = bot.guilds.get("303263004835708928");
+const guild = bot.guilds.get("guildID");
 
 // Insert your authentication token:
-const TOKEN = "NjMxNTIyNDgyMDU4Mjk3Mzc1.XZ4F_Q.tGnwqqZh4-JIBvNP1Z8ZVQy0C_k";
+const TOKEN = "authToken";
 
 // Insert name of emojis that trigger reactions mapped to name of correspondive roles:
 const Roles = {
@@ -14,9 +14,9 @@ const Roles = {
 }
 
 const cacheReactionMessage = () => {
-    // Insert id of message (and it's channel) that's listening to reactions:
-    const channelId = "631520243444875273";
-    const messageId = "631523626964877322";
+    // Insert id of message (and it's channel that's listening to reactions:
+    const channelId = "channelId";
+    const messageId = "messageId";
     const reactionChannel = bot.channels.get(channelId);
     reactionChannel.fetchMessage(messageId)
         .then( msg => console.log(`Fetched and cached message: ${msg.id}`))
