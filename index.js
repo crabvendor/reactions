@@ -13,14 +13,13 @@ const Roles = {
     "SabaPing": "Fish",
 }
 
-const cacheReactionMessage = () => {
+const cacheReactionMessage = async () => {
     // Insert id of message (and it's channel) that's listening to reactions:
     const channelId = "channelId";
     const messageId = "messageId";
     const reactionChannel = bot.channels.get(channelId);
-    reactionChannel.fetchMessage(messageId)
-        .then(msg => console.log(`Fetched and cached message: ${msg.id}`))
-        .catch(err => console.log(err));
+    reactionChannel.fetchMessage(messageId);
+    await console.log(`Fetched and cached message: ${messageId}`);
 }
 
 bot.on('ready', () => {
@@ -28,23 +27,21 @@ bot.on('ready', () => {
     cacheReactionMessage();
 });
 
-bot.on('messageReactionAdd', ({ emoji }, { username, id }) => {
+bot.on('messageReactionAdd', async ({ emoji }, { username, id }) => {
     const role = guild.roles.find(role => role.name === Roles[emoji.name]);
     const member = guild.members.find(member => member.id === id);
     if (role && member) {
-        member.addRole(role.id)
-            .then( member => console.log(`Granted role ${role.name} to user ${username}`))
-            .catch( err => console.log(err));
+        member.addRole(role.id);
+        await console.log(`Granted role ${role.name} to user ${username}`);
     }
 });
 
-bot.on('messageReactionRemove', ({ emoji }, { username, id }) => {
+bot.on('messageReactionRemove', async ({ emoji }, { username, id }) => {
     const role = guild.roles.find(role => role.name === Roles[emoji.name]);
     const member = guild.members.find(member => member.id === id);
     if (role && member) {
-        member.removeRole(role.id)
-            .then(member => console.log(`Removed role ${role.name} from user ${username}`))
-            .catch(err => console.log(err));
+        member.removeRole(role.id);
+        await console.log(`Removed role ${role.name} from user ${username}`);
     }
 });
 
