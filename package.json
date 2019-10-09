@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "description": "Discord bot granting roles upon reactions",
   "main": "index.js",
-  "scripts": {
-    "test": "!test"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
-    "url": "-"
+    "url": "https://github.com/crabvendor/reactions"
   },
   "author": "hayde",
   "license": "ISC",
