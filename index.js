@@ -1,22 +1,25 @@
-const Discord = require('discord.js');
 
+// import { roleAssigner } from './roleAssignment.js';
+const Discord = require('discord.js');
+const RoleAssignment = require('./roleAssignment.js');
+const roleAssigner = new RoleAssignment.RoleAssigner();
 const bot = new Discord.Client();
 
 // Insert your authentication token:
 const TOKEN = "authToken";
 
-// Insert name of emojis that trigger reactions mapped to name of correspondive roles:
-const Roles = {
-    "SabaPing": "Fish",
-}
 
 const cacheReactionMessage = async () => {
     // Insert id of message (and it's channel) that's listening to reactions:
     const channelId = "channelId";
     const messageId = "messageId";
     const reactionChannel = bot.channels.get(channelId);
-    reactionChannel.fetchMessage(messageId);
-    await console.log(`Fetched and cached message: ${messageId}`);
+    try {
+        await reactionChannel.fetchMessage(messageId);     
+        await console.log(`Fetched and cached message: ${messageId}`);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 bot.on('ready', () => {
@@ -24,24 +27,7 @@ bot.on('ready', () => {
     cacheReactionMessage();
 });
 
-bot.on('messageReactionAdd', async ({ emoji, message }, { username, id }) => {
-    const guild = message.guild;    
-    const role = guild.roles.find(role => role.name === Roles[emoji.name]);
-    const member = guild.members.find(member => member.id === id);
-    if (role && member) {
-        member.addRole(role.id);
-        await console.log(`Granted role ${role.name} to user ${username}`);
-    }
-});
-
-bot.on('messageReactionRemove', async ({ emoji, message }, { username, id }) => {
-    const guild = message.guild;
-    const role = guild.roles.find(role => role.name === Roles[emoji.name]);
-    const member = guild.members.find(member => member.id === id);
-    if (role && member) {
-        member.removeRole(role.id);
-        await console.log(`Removed role ${role.name} from user ${username}`);
-    }
-});
+bot.on('messageReactionAdd', roleAssigner.grantRole);    
+bot.on('messageReactionRemove', roleAssigner.removeRole);
 
 bot.login(TOKEN);
