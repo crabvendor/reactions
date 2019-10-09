@@ -2,9 +2,6 @@ const Discord = require('discord.js');
 
 const bot = new Discord.Client();
 
-// Insert Id of your guild:
-const guild = bot.guilds.get("guildID");
-
 // Insert your authentication token:
 const TOKEN = "authToken";
 
@@ -27,7 +24,8 @@ bot.on('ready', () => {
     cacheReactionMessage();
 });
 
-bot.on('messageReactionAdd', async ({ emoji }, { username, id }) => {
+bot.on('messageReactionAdd', async ({ emoji, message }, { username, id }) => {
+    const guild = message.guild;    
     const role = guild.roles.find(role => role.name === Roles[emoji.name]);
     const member = guild.members.find(member => member.id === id);
     if (role && member) {
@@ -36,7 +34,8 @@ bot.on('messageReactionAdd', async ({ emoji }, { username, id }) => {
     }
 });
 
-bot.on('messageReactionRemove', async ({ emoji }, { username, id }) => {
+bot.on('messageReactionRemove', async ({ emoji, message }, { username, id }) => {
+    const guild = message.guild;
     const role = guild.roles.find(role => role.name === Roles[emoji.name]);
     const member = guild.members.find(member => member.id === id);
     if (role && member) {
