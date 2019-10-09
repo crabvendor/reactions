@@ -14,13 +14,13 @@ const Roles = {
 }
 
 const cacheReactionMessage = () => {
-    // Insert id of message (and it's channel that's listening to reactions:
+    // Insert id of message (and it's channel) that's listening to reactions:
     const channelId = "channelId";
     const messageId = "messageId";
     const reactionChannel = bot.channels.get(channelId);
     reactionChannel.fetchMessage(messageId)
-        .then( msg => console.log(`Fetched and cached message: ${msg.id}`))
-        .catch( err => console.log(err));
+        .then(msg => console.log(`Fetched and cached message: ${msg.id}`))
+        .catch(err => console.log(err));
 }
 
 bot.on('ready', () => {
@@ -28,9 +28,9 @@ bot.on('ready', () => {
     cacheReactionMessage();
 });
 
-bot.on('messageReactionAdd', ({ emoji }, { username }) => {
+bot.on('messageReactionAdd', ({ emoji }, { username, id }) => {
     const role = guild.roles.find(role => role.name === Roles[emoji.name]);
-    const member = guild.members.find(member => member.id === user.id);
+    const member = guild.members.find(member => member.id === id);
     if (role && member) {
         member.addRole(role.id)
             .then( member => console.log(`Granted role ${role.name} to user ${username}`))
@@ -38,13 +38,13 @@ bot.on('messageReactionAdd', ({ emoji }, { username }) => {
     }
 });
 
-bot.on('messageReactionRemove', ({ emoji }, { username }) => {
+bot.on('messageReactionRemove', ({ emoji }, { username, id }) => {
     const role = guild.roles.find(role => role.name === Roles[emoji.name]);
-    const member = guild.members.find(member => member.id === user.id);
+    const member = guild.members.find(member => member.id === id);
     if (role && member) {
         member.removeRole(role.id)
-            .then( member => console.log(`Removed role ${role.name} from user ${username}`))
-            .catch( err => console.log(err));
+            .then(member => console.log(`Removed role ${role.name} from user ${username}`))
+            .catch(err => console.log(err));
     }
 });
 
