@@ -8,7 +8,10 @@ const bot = new Discord.Client();
 const cacheReactionMessage = async () => {
     const reactionChannel = bot.channels.get(channelID);
     try {
-        await reactionChannel.fetchMessage(messageID);     
+        message = await reactionChannel.fetchMessage(messageID);
+        message.reactions.forEach((reaction) => {
+            reaction.fetchUsers();
+        })
         await console.log(`Fetched and cached message: ${messageID}`);
     } catch (error) {
         console.log(error);
