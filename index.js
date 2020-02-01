@@ -8,8 +8,8 @@ const bot = new Discord.Client();
 const cacheReactionMessage = async () => {
     const reactionChannel = bot.channels.get(channelID);
     try {
-        await reactionChannel.fetchMessage(messageId);     
-        await console.log(`Fetched and cached message: ${messageId}`);
+        await reactionChannel.fetchMessage(messageID);     
+        await console.log(`Fetched and cached message: ${messageID}`);
     } catch (error) {
         console.log(error);
     }
@@ -20,6 +20,12 @@ bot.on('ready', () => {
     cacheReactionMessage();
 });
 
-bot.on('messageReactionAdd', roleAssigner.grantRole);    
-bot.on('messageReactionRemove', roleAssigner.removeRole);
+bot.on('messageReactionAdd', (reaction, user) => {
+    if (reaction.message.id == messageID) roleAssigner.grantRole(reaction, user);
+});    
+
+bot.on('messageReactionRemove', (reaction, user) => {
+    if (reaction.message.id == messageID) roleAssigner.removeRole(reaction, user);
+});
+
 bot.login(TOKEN);
