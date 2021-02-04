@@ -1,26 +1,12 @@
 
 const Discord = require('discord.js');
-const { channelID, messageID, TOKEN } = require('./config.js');
+const { messageID, TOKEN } = require('./config.js');
 const RoleAssignment = require('./roleAssignment.js');
 const roleAssigner = new RoleAssignment.RoleAssigner();
-const bot = new Discord.Client();
-
-const cacheReactionMessage = async () => {
-    const reactionChannel = bot.channels.get(channelID);
-    try {
-        message = await reactionChannel.fetchMessage(messageID);
-        message.reactions.forEach((reaction) => {
-            reaction.fetchUsers();
-        })
-        await console.log(`Fetched and cached message: ${messageID}`);
-    } catch (error) {
-        console.log(error);
-    }
-}
+const bot = new Discord.Client({partials: ['MESSAGE', 'CHANNEL', 'REACTION']});
 
 bot.on('ready', () => {
     console.log("Bot initialized");
-    cacheReactionMessage();
 });
 
 bot.on('messageReactionAdd', (reaction, user) => {
